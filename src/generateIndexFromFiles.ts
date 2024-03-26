@@ -17,14 +17,15 @@ function generateIndexFromFiles(srcFolder: string): string {
     const filename = path.basename(filePath);
     const isTsxExtension = filename.includes('.tsx');
     const name = filename.split(isTsxExtension ? '.tsx' : '.ts')[0];
+    const nameWithoutAnyExtension = filename.split('.')[0]
 
     const fileContent = fs.readFileSync(filePath, 'utf8');
 
     const hasExportDefault = fileContent.includes('export default');
 
     return hasExportDefault
-      ? `export { default as ${name} } from './${name}';\n`
-      : `export * as ${name} from './${name}';\n`;
+      ? `export { default as ${nameWithoutAnyExtension} } from './${filename}';\n`
+      : `export * as ${nameWithoutAnyExtension} from './${filename}';\n`;
   });
 
   return indexContentArr.join('');
